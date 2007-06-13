@@ -1,25 +1,21 @@
-%define	name	utempter
-%define	version	0.5.5
-%define	release	%mkrel 2
-
-%define major		0
-%define lib_name_orig	lib%{name}
-%define lib_name	%mklibname %{name} %{major}
+%define major 0
+%define libname_orig lib%{name}
+%define libname %mklibname %{name} %{major}
 
 
 Summary:	Priviledged helper for utmp/wtmp updates
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
+Name:		utempter
+Version:	0.5.5
+Release:	%mkrel 3
 License:	GPL
 Group:		System/Libraries
 URL:		http://www.redhat.com/
 Source0:	%{name}-%{version}.tar.bz2
 Patch0:		utempter-0.5.5-makevars.patch
 Patch1:		utempter-0.5.2-biarch-utmp.patch
-Prereq:		/usr/sbin/groupadd /sbin/ldconfig fileutils
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Requires:	%{lib_name} = %{version}
+Requires(pre):	shadow-utils
+Requires:	%{libname} = %{version}-%{release}
+BuildRoot:	%{_tmppath}/%{name}-%{version}--buildroot
 
 %description
 Utempter is a utility which allows some non-privileged programs to
@@ -27,23 +23,24 @@ have required root access without compromising system
 security. Utempter accomplishes this feat by acting as a buffer
 between root and the programs.
 
-%package -n	%{lib_name}
+%package -n	%{libname}
 Summary:	Library used by %{name}
 Group:		System/Libraries
 
-%description -n	%{lib_name}
+%description -n	%{libname}
 Libutempter is an library which allows some non-privileged
 programs to have required root access without compromising system
 security. It accomplishes this feat by acting as a buffer
 between root and the programs.
 
-%package -n	%{lib_name}-devel
+%package -n	%{libname}-devel
 Summary:	Devel files for %{name}
 Group:		Development/C
-Provides:	%{lib_name_orig}-devel = %{version}-%{release} %{name}-devel = %{version}-%{release}
-Requires:	%{lib_name} = %{version}-%{release}
+Provides:	%{libname_orig}-devel = %{version}-%{release}
+Provides:	%{name}-devel = %{version}-%{release}
+Requires:	%{libname} = %{version}-%{release}
 
-%description -n	%{lib_name}-devel
+%description -n	%{libname}-devel
 Header files for writing apps using libutempter
 
 %prep
@@ -52,38 +49,35 @@ Header files for writing apps using libutempter
 %patch1 -p1 -b .biarch-utmp
 
 %build
-%make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
+%make RPM_OPT_FLAGS="%{optflags}"
 
 %install
-rm -rf $RPM_BUILD_ROOT
-%{makeinstall}
+rm -rf %{buildroot}
+%makeinstall_std
 
-ln -sf lib%{name}.so.%{version} $RPM_BUILD_ROOT%{_libdir}/lib%{name}.so.%{major}
+ln -sf lib%{name}.so.%{version} %{buildroot}%{_libdir}/lib%{name}.so.%{major}
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %pre 
 %{_sbindir}/groupadd -g 22 -r -f utmp
 
-%post -n %{lib_name} -p /sbin/ldconfig
-%postun -n %{lib_name} -p /sbin/ldconfig
-
+%post -n %{libname} -p /sbin/ldconfig
+%postun -n %{libname} -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root)
 %doc COPYING
 %attr(02755, root, utmp) %{_sbindir}/utempter
 
-%files -n %{lib_name}
+%files -n %{libname}
 %defattr(-,root,root)
 %doc COPYING
-%{_libdir}/libutempter.so.*
+%{_libdir}/libutempter.so.%{major}*
 
-%files -n %{lib_name}-devel
+%files -n %{libname}-devel
 %defattr(-,root,root)
 %doc COPYING
 %{_libdir}/libutempter.so
 %{_includedir}/utempter.h
-
-
