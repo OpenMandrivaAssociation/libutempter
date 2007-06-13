@@ -11,7 +11,6 @@ License:	GPL
 Group:		System/Libraries
 URL:		http://www.redhat.com/
 Source0:	%{name}-%{version}.tar.bz2
-Patch0:		utempter-0.5.5-makevars.patch
 Patch1:		utempter-0.5.2-biarch-utmp.patch
 Requires(pre):	shadow-utils
 Requires:	%{libname} = %{version}-%{release}
@@ -45,7 +44,6 @@ Header files for writing apps using libutempter
 
 %prep
 %setup -q
-%patch0 -p1 -b .makevars
 %patch1 -p1 -b .biarch-utmp
 
 %build
@@ -53,9 +51,8 @@ Header files for writing apps using libutempter
 
 %install
 rm -rf %{buildroot}
-%makeinstall_std
 
-ln -sf lib%{name}.so.%{version} %{buildroot}%{_libdir}/lib%{name}.so.%{major}
+%makeinstall_std LIBDIR=%{_libdir}
 
 %clean
 rm -rf %{buildroot}
