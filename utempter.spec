@@ -14,6 +14,7 @@ Source0:	%{name}-%{version}.tar.bz2
 Patch1:		utempter-0.5.2-biarch-utmp.patch
 Requires(pre):	shadow-utils
 Requires:	%{libname} = %{version}-%{release}
+BuildRoot:	%{_tmppath}/%{name}-%{version}--buildroot
 
 %description
 Utempter is a utility which allows some non-privileged programs to
