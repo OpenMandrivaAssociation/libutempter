@@ -6,7 +6,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		utempter
 Version:	0.5.5
-Release:	%mkrel 12
+Release:	13
 License:	GPL
 Group:		System/Libraries
 URL:		http://www.redhat.com/
@@ -14,7 +14,6 @@ Source0:	%{name}-%{version}.tar.bz2
 Patch1:		utempter-0.5.2-biarch-utmp.patch
 Requires(pre):	shadow-utils
 Requires:	%{libname} = %{version}-%{release}
-BuildRoot:	%{_tmppath}/%{name}-%{version}--buildroot
 
 %description
 Utempter is a utility which allows some non-privileged programs to
@@ -53,6 +52,8 @@ Header files for writing apps using libutempter
 rm -rf %{buildroot}
 
 %makeinstall_std LIBDIR=%{_libdir}
+# Workaround for a debuginfo bug
+strip %buildroot%_libdir/*.so*
 
 %clean
 rm -rf %{buildroot}
