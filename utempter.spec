@@ -2,11 +2,10 @@
 %define libname_orig lib%{name}
 %define libname %mklibname %{name} %{major}
 
-
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		utempter
 Version:	0.5.5
-Release:	13
+Release:	14
 License:	GPL
 Group:		System/Libraries
 URL:		http://www.redhat.com/
@@ -49,37 +48,97 @@ Header files for writing apps using libutempter
 %make RPM_OPT_FLAGS="%{optflags}"
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std LIBDIR=%{_libdir}
-# Workaround for a debuginfo bug
-strip %buildroot%_libdir/*.so*
 
-%clean
-rm -rf %{buildroot}
+chmod 0755 %{buildroot}%{_libdir}/libutempter.so.%{major}*
 
 %pre 
 %{_sbindir}/groupadd -g 22 -r -f utmp
 
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
 %files
-%defattr(-,root,root)
 %doc COPYING
 %attr(02755, root, utmp) %{_sbindir}/utempter
 
 %files -n %{libname}
-%defattr(-,root,root)
 %doc COPYING
 %{_libdir}/libutempter.so.%{major}*
 
 %files -n %{libname}-devel
-%defattr(-,root,root)
 %doc COPYING
 %{_libdir}/libutempter.so
 %{_includedir}/utempter.h
+
+
+%changelog
+* Fri May 06 2011 Oden Eriksson <oeriksson@mandriva.com> 0.5.5-12mdv2011.0
++ Revision: 670756
+- mass rebuild
+
+* Sat Dec 04 2010 Oden Eriksson <oeriksson@mandriva.com> 0.5.5-11mdv2011.0
++ Revision: 608118
+- rebuild
+
+* Wed Apr 28 2010 Christophe Fergeau <cfergeau@mandriva.com> 0.5.5-10mdv2010.1
++ Revision: 540363
+- rebuild so that shared libraries are properly stripped again
+
+* Wed Apr 28 2010 Christophe Fergeau <cfergeau@mandriva.com> 0.5.5-9mdv2010.1
++ Revision: 540043
+- rebuild so that shared libraries are properly stripped again
+
+* Wed Mar 17 2010 Oden Eriksson <oeriksson@mandriva.com> 0.5.5-8mdv2010.1
++ Revision: 524306
+- rebuilt for 2010.1
+
+* Thu Sep 03 2009 Christophe Fergeau <cfergeau@mandriva.com> 0.5.5-7mdv2010.0
++ Revision: 427485
+- rebuild
+
+* Sat Mar 07 2009 Antoine Ginies <aginies@mandriva.com> 0.5.5-6mdv2009.1
++ Revision: 351444
+- rebuild
+
+* Wed Jun 18 2008 Thierry Vignaud <tv@mandriva.org> 0.5.5-5mdv2009.0
++ Revision: 225913
+- rebuild
+
+  + Pixel <pixel@mandriva.com>
+    - do not call ldconfig in %%post/%%postun, it is now handled by filetriggers
+
+* Wed Mar 05 2008 Oden Eriksson <oeriksson@mandriva.com> 0.5.5-4mdv2008.1
++ Revision: 179674
+- rebuild
+
+  + Olivier Blin <oblin@mandriva.com>
+    - restore BuildRoot
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill re-definition of %%buildroot on Pixel's request
+
+* Wed Jun 13 2007 Tomasz Pawel Gajc <tpg@mandriva.org> 0.5.5-3mdv2008.0
++ Revision: 38648
+- drop patch 0 (it only spoils things)
+- drop prereq, use instead requires(pre)
+- spec file clean
+- adjust requires/provides
+
+
+* Sun Jan 14 2007 Götz Waschk <waschk@mandriva.org> 0.5.5-2mdv2007.0
++ Revision: 108712
+- Import utempter
+
+* Sun Jan 14 2007 Götz Waschk <waschk@mandriva.org> 0.5.5-2mdv2007.1
+- drop patch
+
+* Sun Jan 01 2006 Mandriva Linux Team <http://www.mandrivaexpert.com/> 0.5.5-2mdk
+- Rebuild
+
+* Fri Dec 17 2004 Per Øyvind Karlsen <peroyvind@linux-mandrake.com> 0.5.5-1mdk
+- 0.5.5
+- regenerate P0
+- fix provides
+- cleanups
+
+* Thu Apr 22 2004 Thierry Vignaud <tvignaud@mandrakesoft.com> 0.5.2-13mdk
+- security update, issue uncovered by Steve Grubb (patch2)
+
