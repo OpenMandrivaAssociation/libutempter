@@ -5,7 +5,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		utempter
 Version:	0.5.5
-Release:	14
+Release:	15
 License:	GPL
 Group:		System/Libraries
 URL:		http://www.redhat.com/
@@ -56,12 +56,10 @@ chmod 0755 %{buildroot}%{_libdir}/libutempter.so.%{major}*
 %{_sbindir}/groupadd -g 22 -r -f utmp
 
 %files
-%doc COPYING
 %attr(02755, root, utmp) %{_sbindir}/utempter
 
 %files -n %{libname}
-%doc COPYING
-%{_libdir}/libutempter.so.%{major}*
+%{_libdir}/ibutempter.so.%{major}*
 
 %files -n %{libname}-devel
 %doc COPYING
