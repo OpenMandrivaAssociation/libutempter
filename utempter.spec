@@ -62,7 +62,7 @@ strip %{buildroot}%{_libdir}/*.so*
 %attr(02755, root, utmp) %{_sbindir}/utempter
 
 %files -n %{libname}
-%{_libdir}/ibutempter.so.%{major}*
+%{_libdir}/libutempter.so.%{major}*
 
 %files -n %{libname}-devel
 %doc COPYING
