@@ -45,7 +45,7 @@ Header files for writing apps using libutempter
 %patch1 -p1 -b .biarch-utmp
 
 %build
-%make RPM_OPT_FLAGS="%{optflags}"
+%make CC="%{__cc}" AR="%{__ar}" RANLIB="%{__ranlib}"  RPM_OPT_FLAGS="%{optflags}"
 
 %install
 %makeinstall_std LIBDIR=%{_libdir}
@@ -53,7 +53,7 @@ Header files for writing apps using libutempter
 chmod 0755 %{buildroot}%{_libdir}/libutempter.so.%{major}*
 
 # Workaround for a debuginfo bug
-strip %{buildroot}%{_libdir}/*.so*
+%{__strip} %{buildroot}%{_libdir}/*.so*
 
 %pre 
 %{_sbindir}/groupadd -g 22 -r -f utmp
