@@ -5,7 +5,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		utempter
 Version:	0.5.5
-Release:	15
+Release:	16
 License:	GPL
 Group:		System/Libraries
 URL:		http://www.redhat.com/
@@ -38,7 +38,7 @@ Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
 
 %description -n	%{libname}-devel
-Header files for writing apps using libutempter
+Header files for writing apps using libutempter.
 
 %prep
 %setup -q
