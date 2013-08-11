@@ -62,7 +62,6 @@ chmod 0755 %{buildroot}%{_libdir}/libutempter.so.%{major}*
 %{_libdir}/libutempter.so.%{major}*
 
 %files -n %{libname}-devel
-%doc COPYING
 %{_libdir}/libutempter.so
 %{_includedir}/utempter.h
 
