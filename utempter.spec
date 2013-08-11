@@ -52,9 +52,6 @@ Header files for writing apps using libutempter.
 
 chmod 0755 %{buildroot}%{_libdir}/libutempter.so.%{major}*
 
-# Workaround for a debuginfo bug
-%{__strip} %{buildroot}%{_libdir}/*.so*
-
 %pre 
 %{_sbindir}/groupadd -g 22 -r -f utmp
 
