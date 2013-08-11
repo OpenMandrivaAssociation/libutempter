@@ -1,6 +1,5 @@
-%define major 0
-%define libname_orig lib%{name}
-%define libname %mklibname %{name} %{major}
+%define	major	0
+%define	libname	%mklibname %{name} %{major}
 
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		utempter
@@ -33,7 +32,6 @@ between root and the programs.
 %package -n	%{libname}-devel
 Summary:	Devel files for %{name}
 Group:		Development/C
-Provides:	%{libname_orig}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Requires:	%{libname} = %{version}-%{release}
 
@@ -49,8 +47,6 @@ Header files for writing apps using libutempter.
 
 %install
 %makeinstall_std LIBDIR=%{_libdir}
-
-chmod 0755 %{buildroot}%{_libdir}/libutempter.so.%{major}*
 
 %pre 
 %{_sbindir}/groupadd -g 22 -r -f utmp
