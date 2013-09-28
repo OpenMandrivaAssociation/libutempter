@@ -4,6 +4,7 @@
 %define	newmaj	1
 %define	libname	%mklibname utempter %{major}
 %define	newlib	%mklibname utempter %{newmaj}
+%define	devname	%mklibname utempter -d
 
 %bcond_without	uclibc
 
@@ -72,15 +73,15 @@ programs to have required root access without compromising system
 security. It accomplishes this feat by acting as a buffer
 between root and the programs.
 
-%package -n	%{libname}-devel
+%package -n	%{devname}
 Summary:	Devel files for %{name}
 Group:		Development/C
-Provides:	%{name}-devel = %{EVRD}}
+Provides:	utempter-devel = %{EVRD}}
 %if %{with uclibc}
 Requires:	uclibc-%{libname} = %{EVRD}
 %endif
 
-%description -n	%{libname}-devel
+%description -n	%{devname}
 Header files for writing apps using libutempter.
 
 %prep
@@ -140,7 +141,7 @@ ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 %{uclibc_root}%{_libdir}/libutempter.so.%{newmaj}*
 %endif
 
-%files -n %{libname}-devel
+%files -n %{devname}
 %{_libdir}/libutempter.so
 %if %{with uclibc}
 %{uclibc_root}%{_libdir}/libutempter.so
