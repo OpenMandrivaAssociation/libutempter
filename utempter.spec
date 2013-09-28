@@ -1,24 +1,40 @@
+%define utempter_compat_ver 0.5.5
+
 %define	major	0
+%define	newmaj	1
 %define	libname	%mklibname %{name} %{major}
+%define	newlib	%mklibname %{name} %{newmaj}
 
 %bcond_without	uclibc
 
 Summary:	Priviledged helper for utmp/wtmp updates
-Name:		utempter
-Version:	0.5.5
-Release:	17
+Name:		libutempter
+Version:	1.1.6
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
-URL:		http://www.redhat.com/
-Source0:	%{name}-%{version}.tar.bz2
-Patch1:		utempter-0.5.2-biarch-utmp.patch
+URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
+Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.bz2
+# Compile with PIE and RELRO flags.
+Patch0:		libutempter-pierelro.patch
 Requires(pre):	shadow-utils
 Requires:	%{libname} = %{version}-%{release}
 %if %{with uclibc}
 BuildRequires:	uClibc-devel
 %endif
+Provides:	utempter = %{utempter_compat_ver}
 
 %description
+Utempter is a utility which allows some non-privileged programs to
+have required root access without compromising system
+security. Utempter accomplishes this feat by acting as a buffer
+between root and the programs.
+
+%package -n	uclibc-utempter
+Summary:	Priviledged helper for utmp/wtmp updates (uClibc build)
+Group:		System/Libraries
+
+%description -n	uclibc-utempter
 Utempter is a utility which allows some non-privileged programs to
 have required root access without compromising system
 security. Utempter accomplishes this feat by acting as a buffer
@@ -55,13 +71,23 @@ programs to have required root access without compromising system
 security. It accomplishes this feat by acting as a buffer
 between root and the programs.
 
+%package -n	uclibc-%{newlib}
+Summary:	Library used by %{name} (uClibc build)
+Group:		System/Libraries
+
+%description -n	uclibc-%{newlib}
+Libutempter is an library which allows some non-privileged
+programs to have required root access without compromising system
+security. It accomplishes this feat by acting as a buffer
+between root and the programs.
+
 %package -n	%{libname}-devel
 Summary:	Devel files for %{name}
 Group:		Development/C
-Provides:	%{name}-devel = %{version}-%{release}
-Requires:	%{libname} = %{version}-%{release}
+Provides:	%{name}-devel = %{EVRD}}
+Requires:	%{newlib} = %{EVRD}
 %if %{with uclibc}
-Requires:	uclibc-%{libname} = %{version}-%{release}
+Requires:	uclibc-%{newlib} = %{EVRD}
 %endif
 
 %description -n	%{libname}-devel
@@ -69,7 +95,7 @@ Header files for writing apps using libutempter.
 
 %prep
 %setup -q
-%patch1 -p1 -b .biarch-utmp
+%patch0 -p1 -b .pierelro~
 %if %{with uclibc}
 mkdir .uclibc
 cp -a * .uclibc
@@ -78,35 +104,50 @@ cp -a * .uclibc
 %build
 %if %{with uclibc}
 pushd .uclibc
-%make CC="%{uclibc_cc}" AR="%{__ar}" RANLIB="%{__ranlib}"  RPM_OPT_FLAGS="%{uclibc_cflags}"
+%make CC="%{uclibc_cc}" CFLAGS="%{uclibc_cflags}" libdir="%{uclibc_root}%{_libdir}" libexecdir="%{uclibc_root}%{_libexecdir}"
 popd
 %endif
 
-%make CC="%{__cc}" AR="%{__ar}" RANLIB="%{__ranlib}"  RPM_OPT_FLAGS="%{optflags}"
+%make CC="%{__cc}" CFLAGS="%{optflags}" libdir="%{_libdir}" libexecdir="%{_libexecdir}"
 
 %install
 %if %{with uclibc}
-%makeinstall_std -C .uclibc PREFIX=%{uclibc_root} LIBDIR=%{uclibc_root}%{_libdir}
-mv %{buildroot}%{_sbindir} %{buildroot}%{uclibc_root}%{_prefix}
+%makeinstall_std -C .uclibc bindir="%{uclibc_root}%{_sbindir}" libdir="%{uclibc_root}%{_libdir}" libexecdir="%{uclibc_root}%{_libdir}"
+rm -r %{buildroot}%{_mandir}
+rm %{buildroot}%{uclibc_root}%{_libdir}/libutempter.a
+mkdir %{buildroot}%{uclibc_root}%{_sbindir}
+ln -sr %{buildroot}%{uclibc_root}%{_libexecdir}/utempter/utempter %{buildroot}%{uclibc_root}%{_sbindir}
 %endif
 
-%makeinstall_std LIBDIR=%{_libdir}
+%makeinstall_std libdir="%{_libdir}" libexecdir="%{_libexecdir}"
+rm %{buildroot}%{_libdir}/libutempter.a
+mkdir %{buildroot}%{_sbindir}
+ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 
 %pre 
 %{_sbindir}/groupadd -g 22 -r -f utmp
 
 %files
 %attr(02755, root, utmp) %{_sbindir}/utempter
+%dir %attr(755,root,utempter) %{_libexecdir}/utempter
+%attr(2711,root,utmp) %{_libexecdir}/utempter/utempter
+%{_mandir}/man3/*.3*
+
+%if %{with uclibc}
+%files -n uclibc-utempter
+%attr(02755, root, utmp) %{uclibc_root}%{_sbindir}/utempter
+%dir %attr(755,root,utempter) %{uclibc_root}%{_libexecdir}/utempter
+%attr(2755,root,utmp) %{uclibc_root}%{_libexecdir}/utempter/utempter
+%endif
 
 %files -n %{libname}
 %{_libdir}/libutempter.so.%{major}*
+%{_libdir}/libutempter.so.%{newmaj}*
 
 %if %{with uclibc}
-%files -n uclibc-%{name}
-%attr(02755, root, utmp) %{uclibc_root}%{_sbindir}/utempter
-
 %files -n uclibc-%{libname}
 %{uclibc_root}%{_libdir}/libutempter.so.%{major}*
+%{uclibc_root}%{_libdir}/libutempter.so.%{newmaj}*
 %endif
 
 %files -n %{libname}-devel
