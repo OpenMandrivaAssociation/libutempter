@@ -71,23 +71,12 @@ programs to have required root access without compromising system
 security. It accomplishes this feat by acting as a buffer
 between root and the programs.
 
-%package -n	uclibc-%{newlib}
-Summary:	Library used by %{name} (uClibc build)
-Group:		System/Libraries
-
-%description -n	uclibc-%{newlib}
-Libutempter is an library which allows some non-privileged
-programs to have required root access without compromising system
-security. It accomplishes this feat by acting as a buffer
-between root and the programs.
-
 %package -n	%{libname}-devel
 Summary:	Devel files for %{name}
 Group:		Development/C
 Provides:	%{name}-devel = %{EVRD}}
-Requires:	%{newlib} = %{EVRD}
 %if %{with uclibc}
-Requires:	uclibc-%{newlib} = %{EVRD}
+Requires:	uclibc-%{libname} = %{EVRD}
 %endif
 
 %description -n	%{libname}-devel
