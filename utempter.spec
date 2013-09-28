@@ -1,9 +1,9 @@
-%define utempter_compat_ver 0.5.5
+%define utempter_compat_ver 0.5.5-17
 
 %define	major	0
 %define	newmaj	1
-%define	libname	%mklibname %{name} %{major}
-%define	newlib	%mklibname %{name} %{newmaj}
+%define	libname	%mklibname utempter %{major}
+%define	newlib	%mklibname utempter %{newmaj}
 
 %bcond_without	uclibc
 
@@ -23,6 +23,7 @@ Requires:	%{libname} = %{version}-%{release}
 BuildRequires:	uClibc-devel
 %endif
 Provides:	utempter = %{utempter_compat_ver}
+Obsoletes:	utempter = %{utempter_compat_ver}
 
 %description
 Utempter is a utility which allows some non-privileged programs to
