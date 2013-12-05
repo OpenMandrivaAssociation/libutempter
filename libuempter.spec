@@ -116,6 +116,7 @@ ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 
 %pre 
 %{_sbindir}/groupadd -g 22 -r -f utmp
+%{_sbindir}/groupadd -g 35 -r -f utempter
 
 %files
 %attr(02755, root, utmp) %{_sbindir}/utempter
