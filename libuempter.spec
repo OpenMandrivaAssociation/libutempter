@@ -1,5 +1,3 @@
-%define utempter_compat_ver 0.5.5-17
-
 %define	major	0
 %define	newmaj	1
 %define	libname	%mklibname utempter %{major}
@@ -11,7 +9,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.1.6
-Release:	1.1
+Release:	2
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
@@ -23,8 +21,7 @@ Requires:	%{libname} = %{version}-%{release}
 %if %{with uclibc}
 BuildRequires:	uClibc-devel
 %endif
-Provides:	utempter = %{utempter_compat_ver}
-Obsoletes:	utempter = %{utempter_compat_ver}
+%rename		utempter
 
 %description
 Utempter is a utility which allows some non-privileged programs to
@@ -32,11 +29,12 @@ have required root access without compromising system
 security. Utempter accomplishes this feat by acting as a buffer
 between root and the programs.
 
-%package -n	uclibc-utempter
+%package -n	uclibc-%{name}
 Summary:	Priviledged helper for utmp/wtmp updates (uClibc build)
 Group:		System/Libraries
+%rename		uclibc-utempter
 
-%description -n	uclibc-utempter
+%description -n	uclibc-%{name}
 Utempter is a utility which allows some non-privileged programs to
 have required root access without compromising system
 security. Utempter accomplishes this feat by acting as a buffer
@@ -125,7 +123,7 @@ ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 %{_mandir}/man3/*.3*
 
 %if %{with uclibc}
-%files -n uclibc-utempter
+%files -n uclibc-%{name}
 %attr(02755, root, utmp) %{uclibc_root}%{_sbindir}/utempter
 %dir %attr(755,root,utempter) %{uclibc_root}%{_libexecdir}/utempter
 %attr(2755,root,utmp) %{uclibc_root}%{_libexecdir}/utempter/utempter
