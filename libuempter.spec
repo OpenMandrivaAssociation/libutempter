@@ -115,7 +115,7 @@ mkdir %{buildroot}%{_sbindir}
 ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 
 %pre 
-%{_sbindir}/groupadd -g 22 -r -f utmp
+%{_sbindir}/groupadd -g 24 -r -f utmp
 %{_sbindir}/groupadd -g 35 -r -f utempter
 
 %files
