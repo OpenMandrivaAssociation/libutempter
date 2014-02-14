@@ -1,7 +1,5 @@
 %define	major	0
-%define	newmaj	1
 %define	libname	%mklibname utempter %{major}
-%define	newlib	%mklibname utempter %{newmaj}
 %define	devname	%mklibname utempter -d
 
 %bcond_without	uclibc
@@ -16,6 +14,7 @@ URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
 Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.bz2
 # Compile with PIE and RELRO flags.
 Patch0:		libutempter-pierelro.patch
+Patch1:		libutempter-1.1.6-sanitize-linking-naming.patch
 Requires(pre):	shadow-utils
 Requires:	%{libname} = %{version}-%{release}
 %if %{with uclibc}
@@ -85,6 +84,7 @@ Header files for writing apps using libutempter.
 %prep
 %setup -q
 %patch0 -p1 -b .pierelro~
+%patch1 -p1 -b .linknaming~
 %if %{with uclibc}
 mkdir .uclibc
 cp -a * .uclibc
@@ -131,12 +131,10 @@ ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 
 %files -n %{libname}
 %{_libdir}/libutempter.so.%{major}*
-%{_libdir}/libutempter.so.%{newmaj}*
 
 %if %{with uclibc}
 %files -n uclibc-%{libname}
 %{uclibc_root}%{_libdir}/libutempter.so.%{major}*
-%{uclibc_root}%{_libdir}/libutempter.so.%{newmaj}*
 %endif
 
 %files -n %{devname}
