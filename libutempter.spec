@@ -102,7 +102,7 @@ popd
 
 %install
 %if %{with uclibc}
-%makeinstall_std -C .uclibc bindir="%{uclibc_root}%{_sbindir}" libdir="%{uclibc_root}%{_libdir}" libexecdir="%{uclibc_root}%{_libdir}"
+%makeinstall_std -C .uclibc bindir="%{uclibc_root}%{_sbindir}" libdir="%{uclibc_root}%{_libdir}" libexecdir="%{uclibc_root}%{_libexecdir}"
 rm -r %{buildroot}%{_mandir}
 rm %{buildroot}%{uclibc_root}%{_libdir}/libutempter.a
 mkdir %{buildroot}%{uclibc_root}%{_sbindir}
