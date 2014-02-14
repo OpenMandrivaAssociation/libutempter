@@ -1,0 +1,31 @@
+--- libutempter-1.1.6/Makefile~	2014-02-14 11:38:14.270086732 +0100
++++ libutempter-1.1.6/Makefile	2014-02-14 11:38:18.380266654 +0100
+@@ -27,7 +27,7 @@ SONAME = $(SHAREDLIB).$(MAJOR)
+ STATICLIB = lib$(PROJECT).a
+ MAP = lib$(PROJECT).map
+ 
+-TARGETS = $(PROJECT) $(SHAREDLIB) $(STATICLIB)
++TARGETS = $(PROJECT) $(SONAME) $(STATICLIB)
+ 
+ INSTALL = install
+ libdir = /usr/lib
+@@ -55,7 +55,7 @@ $(PROJECT): utempter.c
+ 	$(LINK.c) -pie -fPIE -Wl,-z,relro,-z,now,-stats $(LDLIBS) \
+ 		$< $(OUTPUT_OPTION)
+ 
+-$(SHAREDLIB): iface.os $(MAP)
++$(SONAME): iface.os $(MAP)
+ 	$(LINK.o) -shared \
+ 		-Wl,-soname,$(SONAME),--version-script=$(MAP),-z,relro,-z,defs,-stats \
+ 		-lc $< $(OUTPUT_OPTION)
+@@ -71,9 +71,8 @@ install:
+ 		$(DESTDIR)$(includedir) $(DESTDIR)$(man3dir)
+ 	$(INSTALL) -p -m2711 $(PROJECT) $(DESTDIR)$(libexecdir)/$(PROJECT)/
+ 	$(INSTALL) -p -m644 $(PROJECT).h $(DESTDIR)$(includedir)/
+-	$(INSTALL) -p -m755 $(SHAREDLIB) $(DESTDIR)$(libdir)/$(SHAREDLIB).$(VERSION)
++	$(INSTALL) -p -m755 $(SONAME) $(DESTDIR)$(libdir)/$(SONAME)
+ 	$(INSTALL) -p -m644 $(STATICLIB) $(DESTDIR)$(libdir)/
+-	ln -s $(SHAREDLIB).$(VERSION) $(DESTDIR)$(libdir)/$(SONAME)
+ 	ln -s $(SONAME) $(DESTDIR)$(libdir)/$(SHAREDLIB)
+ 	$(INSTALL) -p -m644 $(PROJECT).3 $(DESTDIR)$(man3dir)/
+ 	for n in lib$(PROJECT) utempter_add_record utempter_remove_record \
