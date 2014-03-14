@@ -7,7 +7,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.1.6
-Release:	5
+Release:	6
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
@@ -46,17 +46,6 @@ Group:		System/Libraries
 Libutempter is an library which allows some non-privileged
 programs to have required root access without compromising system
 security. It accomplishes this feat by acting as a buffer
-between root and the programs.
-
-%package -n	uclibc-%{name}
-Summary:	Priviledged helper for utmp/wtmp updates (uClibc build)
-Group:		System/Libraries
-Requires:	uclibc-%{libname} = %{EVRD}
-
-%description -n	uclibc-%{name}
-Utempter is a utility which allows some non-privileged programs to
-have required root access without compromising system
-security. Utempter accomplishes this feat by acting as a buffer
 between root and the programs.
 
 %package -n	uclibc-%{libname}
