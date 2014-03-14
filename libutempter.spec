@@ -77,6 +77,7 @@ Provides:	utempter-devel = %{EVRD}}
 %if %{with uclibc}
 Requires:	uclibc-%{libname} = %{EVRD}
 %endif
+%rename		%{_lib}utempter0-devel
 
 %description -n	%{devname}
 Header files for writing apps using libutempter.
@@ -114,7 +115,7 @@ mkdir %{buildroot}%{_sbindir}
 ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 
 %pre 
-%{_sbindir}/groupadd -g 22 -r -f utmp
+%{_sbindir}/groupadd -g 35 -r -f utempter
 
 %files
 %attr(02755, root, utmp) %{_sbindir}/utempter
