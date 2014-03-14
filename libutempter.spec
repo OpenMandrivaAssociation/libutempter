@@ -7,7 +7,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.1.6
-Release:	3
+Release:	5
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
@@ -15,7 +15,6 @@ Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.b
 # Compile with PIE and RELRO flags.
 Patch0:		libutempter-pierelro.patch
 Patch1:		libutempter-1.1.6-sanitize-linking-naming.patch
-Requires(pre):	shadow-utils
 Requires:	%{libname} = %{version}-%{release}
 %if %{with uclibc}
 BuildRequires:	uClibc-devel
@@ -102,7 +101,7 @@ popd
 
 %install
 %if %{with uclibc}
-%makeinstall_std -C .uclibc bindir="%{uclibc_root}%{_sbindir}" libdir="%{uclibc_root}%{_libdir}" libexecdir="%{uclibc_root}%{_libdir}"
+%makeinstall_std -C .uclibc bindir="%{uclibc_root}%{_sbindir}" libdir="%{uclibc_root}%{_libdir}" libexecdir="%{uclibc_root}%{_libexecdir}"
 rm -r %{buildroot}%{_mandir}
 rm %{buildroot}%{uclibc_root}%{_libdir}/libutempter.a
 mkdir %{buildroot}%{uclibc_root}%{_sbindir}
@@ -114,8 +113,13 @@ rm %{buildroot}%{_libdir}/libutempter.a
 mkdir %{buildroot}%{_sbindir}
 ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 
-%pre 
-%{_sbindir}/groupadd -g 35 -r -f utempter
+
+%pre -p <lua>
+if not posix.getgroup("utempter") then
+    if not posix.exec("%{_sbindir}/groupadd", "-g", "35", "-r", "-f", "utempter") then
+        error("%{_sbindir}/groupadd: " ..  posix.errno())
+    end
+end
 
 %files
 %attr(02755, root, utmp) %{_sbindir}/utempter
