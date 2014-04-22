@@ -7,7 +7,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.1.6
-Release:	6
+Release:	7
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
@@ -104,9 +104,11 @@ ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 
 
 %pre -p <lua>
-if not posix.getgroup("utempter") then
-    if not posix.exec("%{_sbindir}/groupadd", "-g", "35", "-r", "-f", "utempter") then
-        error("%{_sbindir}/groupadd: " ..  posix.errno())
+if arg[2] >= 2 then
+    if not posix.getgroup("utempter") then
+	if not posix.exec("%{_sbindir}/groupadd", "-g", "35", "-r", "-f", "utempter") then
+	    error("%{_sbindir}/groupadd: " ..  posix.errno())
+	end
     end
 end
 
