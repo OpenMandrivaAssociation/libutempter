@@ -104,6 +104,11 @@ ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
 
 
 %pre -p <lua>
+st = posix.stat("/etc/mtab")
+if st and st.type ~= "link" then
+    posix.unlink("/etc/mtab")
+end
+
 if arg[2] >= 2 then
     if not posix.getgroup("utempter") then
 	if not posix.exec("%{_sbindir}/groupadd", "-g", "35", "-r", "-f", "utempter") then
