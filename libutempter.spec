@@ -7,7 +7,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.1.6
-Release:	10
+Release:	11
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
@@ -16,6 +16,7 @@ Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.b
 Patch0:		libutempter-pierelro.patch
 Patch1:		libutempter-1.1.6-sanitize-linking-naming.patch
 Requires:	%{libname} = %{version}-%{release}
+Requires:	setup
 %if %{with uclibc}
 BuildRequires:	uClibc-devel
 %endif
