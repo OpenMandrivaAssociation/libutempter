@@ -7,11 +7,12 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.1.6
-Release:	11
+Release:	12
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
 Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.bz2
+Source1:	%{name}.rpmlintrc
 # Compile with PIE and RELRO flags.
 Patch0:		libutempter-pierelro.patch
 Patch1:		libutempter-1.1.6-sanitize-linking-naming.patch
@@ -28,6 +29,7 @@ have required root access without compromising system
 security. Utempter accomplishes this feat by acting as a buffer
 between root and the programs.
 
+%if %{with uclibc}
 %package -n	uclibc-%{name}
 Summary:	Priviledged helper for utmp/wtmp updates (uClibc build)
 Group:		System/Libraries
@@ -37,16 +39,6 @@ Group:		System/Libraries
 Utempter is a utility which allows some non-privileged programs to
 have required root access without compromising system
 security. Utempter accomplishes this feat by acting as a buffer
-between root and the programs.
-
-%package -n	%{libname}
-Summary:	Library used by %{name}
-Group:		System/Libraries
-
-%description -n	%{libname}
-Libutempter is an library which allows some non-privileged
-programs to have required root access without compromising system
-security. It accomplishes this feat by acting as a buffer
 between root and the programs.
 
 %package -n	uclibc-%{libname}
@@ -59,13 +51,33 @@ programs to have required root access without compromising system
 security. It accomplishes this feat by acting as a buffer
 between root and the programs.
 
+%package -n	uclibc-%{devname}
+Summary:	Devel files for %{name}
+Group:		Development/C
+Provides:	uclibc-utempter-devel = %{EVRD}}
+Provides:	uclibc-%{name}-devel = %{EVRD}}
+Requires:	uclibc-%{libname} = %{EVRD}
+Requires:	%{devname} = %{EVRD}
+Conflicts:	%{devname} < 1.1.6-12
+
+%description -n	uclibc-%{devname}
+Header files for writing apps using libutempter.
+%endif
+
+%package -n	%{libname}
+Summary:	Library used by %{name}
+Group:		System/Libraries
+
+%description -n	%{libname}
+Libutempter is an library which allows some non-privileged
+programs to have required root access without compromising system
+security. It accomplishes this feat by acting as a buffer
+between root and the programs.
+
 %package -n	%{devname}
 Summary:	Devel files for %{name}
 Group:		Development/C
 Provides:	utempter-devel = %{EVRD}}
-%if %{with uclibc}
-Requires:	uclibc-%{libname} = %{EVRD}
-%endif
 %rename		%{_lib}utempter0-devel
 
 %description -n	%{devname}
@@ -137,11 +149,11 @@ end
 %if %{with uclibc}
 %files -n uclibc-%{libname}
 %{uclibc_root}%{_libdir}/libutempter.so.%{major}*
+
+%files -n uclibc-%{devname}
+%{uclibc_root}%{_libdir}/libutempter.so
 %endif
 
 %files -n %{devname}
 %{_libdir}/libutempter.so
-%if %{with uclibc}
-%{uclibc_root}%{_libdir}/libutempter.so
-%endif
 %{_includedir}/utempter.h
