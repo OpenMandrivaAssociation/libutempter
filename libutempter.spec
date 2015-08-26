@@ -1,6 +1,7 @@
 %define	major	0
 %define	libname	%mklibname utempter %{major}
 %define	devname	%mklibname utempter -d
+%define disable_lto 1
 
 %bcond_with	uclibc
 
