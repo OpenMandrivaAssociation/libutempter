@@ -2,12 +2,12 @@
 %define	libname	%mklibname utempter %{major}
 %define	devname	%mklibname utempter -d
 
-%bcond_without	uclibc
+%bcond_with	uclibc
 
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.1.6
-Release:	14
+Release:	15
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
