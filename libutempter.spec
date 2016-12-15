@@ -1,12 +1,12 @@
-%define	major	0
-%define	libname	%mklibname utempter %{major}
-%define	devname	%mklibname utempter -d
+%define	major 0
+%define	libname %mklibname utempter %{major}
+%define	devname %mklibname utempter -d
 %define _disable_lto 1
 
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.1.6
-Release:	16
+Release:	17
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
@@ -15,7 +15,7 @@ Source1:	%{name}.rpmlintrc
 # Compile with PIE and RELRO flags.
 Patch0:		libutempter-pierelro.patch
 Patch1:		libutempter-1.1.6-sanitize-linking-naming.patch
-Requires:	%{libname} = %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
 Requires:	setup
 %rename		utempter
 
@@ -38,7 +38,8 @@ between root and the programs.
 %package -n	%{devname}
 Summary:	Devel files for %{name}
 Group:		Development/C
-Provides:	utempter-devel = %{EVRD}}
+Provides:	utempter-devel = %{EVRD}
+Requires:	%{name} = %{EVRD}
 %rename		%{_lib}utempter0-devel
 
 %description -n	%{devname}
