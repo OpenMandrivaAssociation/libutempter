@@ -6,7 +6,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.1.6
-Release:	19
+Release:	20
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
@@ -46,16 +46,14 @@ Requires:	%{name} = %{EVRD}
 Header files for writing apps using libutempter.
 
 %prep
-%setup -q
-%patch0 -p1 -b .pierelro~
-%patch1 -p1 -b .linknaming~
+%autosetup -p1
 
 %build
 %setup_compile_flags
-%make CC="%{__cc}" CFLAGS="%{optflags}" libdir="%{_libdir}" libexecdir="%{_libexecdir}"
+%make_build CC="%{__cc}" CFLAGS="%{optflags}" libdir="%{_libdir}" libexecdir="%{_libexecdir}"
 
 %install
-%makeinstall_std libdir="%{_libdir}" libexecdir="%{_libexecdir}"
+%make_install libdir="%{_libdir}" libexecdir="%{_libexecdir}"
 
 rm %{buildroot}%{_libdir}/libutempter.a
 mkdir %{buildroot}%{_sbindir}
