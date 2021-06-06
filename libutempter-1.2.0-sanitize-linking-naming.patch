@@ -1,5 +1,6 @@
---- libutempter-1.1.6/Makefile~	2014-02-14 11:38:14.270086732 +0100
-+++ libutempter-1.1.6/Makefile	2014-02-14 11:38:18.380266654 +0100
+diff -Nrup a/Makefile b/Makefile
+--- a/Makefile	2020-05-26 19:11:01.000000000 +0200
++++ b/Makefile	2020-05-26 19:14:29.121349743 +0200
 @@ -27,7 +27,7 @@ SONAME = $(SHAREDLIB).$(MAJOR)
  STATICLIB = lib$(PROJECT).a
  MAP = lib$(PROJECT).map
@@ -9,16 +10,16 @@
  
  INSTALL = install
  libdir = /usr/lib
-@@ -55,7 +55,7 @@ $(PROJECT): utempter.c
- 	$(LINK.c) -pie -fPIE -Wl,-z,relro,-z,now,-stats $(LDLIBS) \
- 		$< $(OUTPUT_OPTION)
+@@ -63,7 +63,7 @@ all: $(TARGETS)
+ $(PROJECT): utempter.c diag.h
+ 	$(LINK.c) $(COMPILE_PIE) $(LINK_PIE) $(LINK_RELRO) $(LINK_NOW) $(LDLIBS) $< $(OUTPUT_OPTION)
  
 -$(SHAREDLIB): iface.os $(MAP)
 +$(SONAME): iface.os $(MAP)
  	$(LINK.o) -shared \
- 		-Wl,-soname,$(SONAME),--version-script=$(MAP),-z,relro,-z,defs,-stats \
+ 		-Wl,-soname,$(SONAME),--version-script=$(MAP),-z,relro,-z,defs \
  		-lc $< $(OUTPUT_OPTION)
-@@ -71,9 +71,8 @@ install:
+@@ -81,9 +81,8 @@ install:
  		$(DESTDIR)$(includedir) $(DESTDIR)$(man3dir)
  	$(INSTALL) -p -m2711 $(PROJECT) $(DESTDIR)$(libexecdir)/$(PROJECT)/
  	$(INSTALL) -p -m644 $(PROJECT).h $(DESTDIR)$(includedir)/
