@@ -5,7 +5,7 @@
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
 Version:	1.2.1
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
@@ -63,7 +63,7 @@ if st and st.type ~= "link" then
     posix.unlink("/etc/mtab")
 end
 
-if arg[2] >= 2 then
+if tonumber(arg[2]) >= 2 then
     if not posix.getgroup("utempter") then
 	if not posix.exec("%{_sbindir}/groupadd", "-g", "35", "-r", "-f", "utempter") then
 	    error("%{_sbindir}/groupadd: " ..  posix.errno())
