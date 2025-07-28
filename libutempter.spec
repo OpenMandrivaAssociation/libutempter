@@ -49,6 +49,7 @@ Header files for writing apps using libutempter.
 
 %build
 %set_build_flags
+cd %{name}
 %make_build CC="%{__cc}" CFLAGS="%{optflags}" libdir="%{_libdir}" libexecdir="%{_libexecdir}"
 
 %install
