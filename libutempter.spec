@@ -56,9 +56,9 @@ cd %{name}
 cd %{name}
 %make_install libdir="%{_libdir}" libexecdir="%{_libexecdir}"
 
-rm %{buildroot}%{_libdir}/libutempter.a
-mkdir %{buildroot}%{_sbindir}
-ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
+#rm %{buildroot}%{_libdir}/libutempter.a
+mkdir %{buildroot}%{_bindir}
+ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_bindir}
 
 %pre -p <lua>
 st = posix.stat("/etc/mtab")
@@ -75,7 +75,7 @@ if tonumber(arg[2]) >= 2 then
 end
 
 %files
-%attr(02755, root, utmp) %{_sbindir}/utempter
+%attr(02755, root, utmp) %{_bindir}/utempter
 %dir %attr(755,root,utempter) %{_libexecdir}/utempter
 %attr(2711,root,utmp) %{_libexecdir}/utempter/utempter
 %{_mandir}/man3/*.3*
