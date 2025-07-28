@@ -4,15 +4,16 @@
 
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
-Version:	1.2.1
-Release:	3
+Version:	1.2.3
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
-Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.gz
+Source0:	https://github.com/altlinux/libutempter/archive/%{version}-alt1/%{name}-%{version}-alt1.tar.gz
+#Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.gz
 Source1:	%{name}.rpmlintrc
-Patch0:		libutempter-pierelro.patch
-Patch1:		libutempter-1.2.0-sanitize-linking-naming.patch
+#Patch0:		libutempter-pierelro.patch
+#Patch1:		libutempter-1.2.0-sanitize-linking-naming.patch
 Requires:	%{libname} = %{EVRD}
 Requires(pre):	shadow
 %rename		utempter
@@ -44,18 +45,20 @@ Requires:	%{name} = %{EVRD}
 Header files for writing apps using libutempter.
 
 %prep
-%autosetup -p1
+%autosetup -n %{name}-%{version}-alt1 -p1
 
 %build
 %set_build_flags
+cd %{name}
 %make_build CC="%{__cc}" CFLAGS="%{optflags}" libdir="%{_libdir}" libexecdir="%{_libexecdir}"
 
 %install
+cd %{name}
 %make_install libdir="%{_libdir}" libexecdir="%{_libexecdir}"
 
-rm %{buildroot}%{_libdir}/libutempter.a
-mkdir %{buildroot}%{_sbindir}
-ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_sbindir}
+#rm %{buildroot}%{_libdir}/libutempter.a
+mkdir %{buildroot}%{_bindir}
+ln -sr %{buildroot}%{_libexecdir}/utempter/utempter %{buildroot}%{_bindir}
 
 %pre -p <lua>
 st = posix.stat("/etc/mtab")
@@ -72,13 +75,14 @@ if tonumber(arg[2]) >= 2 then
 end
 
 %files
-%attr(02755, root, utmp) %{_sbindir}/utempter
+%attr(02755, root, utmp) %{_bindir}/utempter
 %dir %attr(755,root,utempter) %{_libexecdir}/utempter
 %attr(2711,root,utmp) %{_libexecdir}/utempter/utempter
 %{_mandir}/man3/*.3*
 
 %files -n %{libname}
 %{_libdir}/libutempter.so.%{major}*
+%{_libdir}/libutempter.so.%{version}
 
 %files -n %{devname}
 %{_libdir}/libutempter.so
