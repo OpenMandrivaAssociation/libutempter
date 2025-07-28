@@ -53,6 +53,7 @@ cd %{name}
 %make_build CC="%{__cc}" CFLAGS="%{optflags}" libdir="%{_libdir}" libexecdir="%{_libexecdir}"
 
 %install
+cd %{name}
 %make_install libdir="%{_libdir}" libexecdir="%{_libexecdir}"
 
 rm %{buildroot}%{_libdir}/libutempter.a
