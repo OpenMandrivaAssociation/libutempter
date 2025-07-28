@@ -13,7 +13,7 @@ Source0:	https://github.com/altlinux/libutempter/archive/%{version}-alt1/%{name}
 #Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.gz
 Source1:	%{name}.rpmlintrc
 #Patch0:		libutempter-pierelro.patch
-Patch1:		libutempter-1.2.0-sanitize-linking-naming.patch
+#Patch1:		libutempter-1.2.0-sanitize-linking-naming.patch
 Requires:	%{libname} = %{EVRD}
 Requires(pre):	shadow
 %rename		utempter
