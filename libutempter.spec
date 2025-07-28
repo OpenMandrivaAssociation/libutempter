@@ -4,12 +4,13 @@
 
 Summary:	Priviledged helper for utmp/wtmp updates
 Name:		libutempter
-Version:	1.2.1
-Release:	3
+Version:	1.2.3
+Release:	1
 License:	GPLv2+
 Group:		System/Libraries
 URL:		ftp://ftp.altlinux.org/pub/people/ldv/utempter
-Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.gz
+Source0:	https://github.com/altlinux/libutempter/archive/%{version}-alt1/%{name}-%{version}-alt1.tar.gz
+#Source0:	ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.gz
 Source1:	%{name}.rpmlintrc
 Patch0:		libutempter-pierelro.patch
 Patch1:		libutempter-1.2.0-sanitize-linking-naming.patch
@@ -44,7 +45,7 @@ Requires:	%{name} = %{EVRD}
 Header files for writing apps using libutempter.
 
 %prep
-%autosetup -p1
+%autosetup -n %{name}-%{version}-alt1 -p1
 
 %build
 %set_build_flags
