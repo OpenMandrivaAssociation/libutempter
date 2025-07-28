@@ -82,6 +82,7 @@ end
 
 %files -n %{libname}
 %{_libdir}/libutempter.so.%{major}*
+%{_libdir}/libutempter.so.%{version}
 
 %files -n %{devname}
 %{_libdir}/libutempter.so
