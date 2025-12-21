@@ -18,6 +18,7 @@ Requires:	%{libname} = %{EVRD}
 Requires(pre):	shadow
 %rename		utempter
 
+BuildRequires:	make
 %description
 Utempter is a utility which allows some non-privileged programs to
 have required root access without compromising system
